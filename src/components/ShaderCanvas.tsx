@@ -5,6 +5,8 @@ import * as THREE from "three";
 import { useRef, useMemo, useState, useEffect, useCallback } from "react";
 import { useShaderStore } from "./store";
 import { Video, Square, Download, Loader2 } from "lucide-react";
+import { FFmpeg } from '@ffmpeg/ffmpeg';
+import { fetchFile, toBlobURL } from '@ffmpeg/util';
 
 function Plane({ frag }: { frag: string }) {
     const material = useMemo(() => {
@@ -90,10 +92,88 @@ export default function ShaderCanvas({ slug }: { slug: string }) {
     const timeRef = useRef<number>(0);
     const videoCanvasRef = useRef<HTMLCanvasElement | null>(null);
     const rendererRef = useRef<{ render: (time: number) => HTMLCanvasElement } | null>(null);
+    const ffmpegRef = useRef<FFmpeg | null>(null);
 
     const [recording, setRecording] = useState(false);
     const [processing, setProcessing] = useState(false);
     const [downloadUrl, setDownloadUrl] = useState<string | null>(null);
+    const [isMP4Format, setIsMP4Format] = useState(false);
+    const [ffmpegLoaded, setFFmpegLoaded] = useState(false);
+    const [processingStatus, setProcessingStatus] = useState('');
+
+    // FFmpegロード
+    useEffect(() => {
+        const loadFFmpeg = async () => {
+            try {
+                const ffmpeg = new FFmpeg();
+
+                // 進捗ログ
+                ffmpeg.on('log', ({ message }) => {
+                    console.log(`FFmpeg: ${message}`);
+                });
+
+                // ロードエラーを回避するために直接URLを使用
+                await ffmpeg.load();
+
+                // スレッド無効化
+                await ffmpeg.exec(['-threads', '1']);
+
+                ffmpegRef.current = ffmpeg;
+                setFFmpegLoaded(true);
+                console.log('FFmpeg loaded');
+            } catch (error) {
+                console.error('FFmpeg load error:', error);
+                // エラーがあってもサイレント失敗（WebMのままダウンロード提供）
+            }
+        };
+
+        // ブラウザ環境のみでロード試行
+        if (typeof window !== 'undefined') {
+            loadFFmpeg();
+        }
+
+        return () => {
+            if (ffmpegRef.current) {
+                ffmpegRef.current.terminate();
+                ffmpegRef.current = null;
+            }
+        };
+    }, []);
+
+    // WebM to MP4 変換関数
+    const convertWebMtoMP4 = async (webmBlob: Blob): Promise<Blob | null> => {
+        if (!ffmpegRef.current || !ffmpegLoaded) {
+            console.warn('FFmpeg not loaded yet');
+            return null;
+        }
+
+        try {
+            const ffmpeg = ffmpegRef.current;
+
+            // ファイルをFFmpegにロード
+            await ffmpeg.writeFile('input.webm', await fetchFile(webmBlob));
+
+            // WebM → MP4変換実行
+            await ffmpeg.exec([
+                '-i', 'input.webm',
+                '-c:v', 'libx264',
+                '-preset', 'fast',
+                '-crf', '22',
+                '-pix_fmt', 'yuv420p',
+                'output.mp4'
+            ]);
+
+            // 結果を取得
+            const data = await ffmpeg.readFile('output.mp4');
+
+            // ArrayBufferからBlobに変換 (型の問題を修正)
+            const uint8Array = data as Uint8Array;
+            return new Blob([uint8Array], { type: 'video/mp4' });
+        } catch (error) {
+            console.error('Conversion error:', error);
+            return null;
+        }
+    };
 
     // レンダラーの初期化
     useEffect(() => {
@@ -143,11 +223,12 @@ export default function ShaderCanvas({ slug }: { slug: string }) {
 
     // サポートされているMIMEタイプを確認
     const getSupportedMimeType = useCallback(() => {
+        // MP4を優先順位の最上位に変更
         const types = [
+            'video/mp4',
             'video/webm;codecs=vp9',
             'video/webm;codecs=vp8',
-            'video/webm',
-            'video/mp4'
+            'video/webm'
         ];
 
         for (const type of types) {
@@ -217,8 +298,9 @@ export default function ShaderCanvas({ slug }: { slug: string }) {
             console.log("ビデオトラック:", stream.getVideoTracks().length);
 
             // MediaRecorder設定
+            const mimeType = getSupportedMimeType();
             const options = {
-                mimeType: getSupportedMimeType(),
+                mimeType,
                 videoBitsPerSecond: 5000000  // 5Mbps
             };
 
@@ -226,6 +308,10 @@ export default function ShaderCanvas({ slug }: { slug: string }) {
             const mediaRecorder = new MediaRecorder(stream, options);
 
             mediaRecorderRef.current = mediaRecorder;
+
+            // 使用するMIMEタイプを記録
+            const isRecordingMP4 = mimeType.includes('mp4');
+            console.log(`録画形式: ${isRecordingMP4 ? 'MP4' : 'WebM'}`);
 
             // ondataavailableハンドラ
             mediaRecorder.ondataavailable = (e) => {
@@ -241,9 +327,10 @@ export default function ShaderCanvas({ slug }: { slug: string }) {
             };
 
             // 録画停止時の処理
-            mediaRecorder.onstop = () => {
+            mediaRecorder.onstop = async () => {
                 console.log(`録画停止: ${chunksRef.current.length}チャンク`);
                 setProcessing(true);
+                setProcessingStatus('録画データを処理中...');
 
                 try {
                     if (chunksRef.current.length === 0) {
@@ -252,8 +339,10 @@ export default function ShaderCanvas({ slug }: { slug: string }) {
                         return;
                     }
 
-                    const blob = new Blob(chunksRef.current, { type: 'video/webm' });
-                    console.log(`Blob作成: ${blob.size} bytes`);
+                    // 録画時のMIMEタイプを使用
+                    const blobType = isRecordingMP4 ? 'video/mp4' : 'video/webm';
+                    const blob = new Blob(chunksRef.current, { type: blobType });
+                    console.log(`Blob作成: ${blob.size} bytes, タイプ: ${blobType}`);
 
                     if (blob.size === 0) {
                         console.error('Blobサイズが0です');
@@ -261,10 +350,56 @@ export default function ShaderCanvas({ slug }: { slug: string }) {
                         return;
                     }
 
+                    // MP4で直接録画できた場合
+                    if (isRecordingMP4) {
+                        const url = URL.createObjectURL(blob);
+                        setDownloadUrl(url);
+                        setIsMP4Format(true);
+                        setProcessingStatus('');
+                        return;
+                    }
+
+                    // WebMの場合はFFmpegでの変換を試みる
+                    // MP4変換を試みる (ブラウザのサポート状況をチェック)
+                    let hasAttemptedConversion = false;
+
+                    // FFmpegによる変換を試みる
+                    if (ffmpegLoaded && ffmpegRef.current) {
+                        try {
+                            hasAttemptedConversion = true;
+                            console.log('FFmpegでMP4変換を試みています...');
+                            setProcessingStatus('MP4に変換中...');
+                            const mp4Blob = await convertWebMtoMP4(blob);
+                            if (mp4Blob) {
+                                const url = URL.createObjectURL(mp4Blob);
+                                setDownloadUrl(url);
+                                setIsMP4Format(true);
+                                setProcessingStatus('');
+                                return;
+                            }
+                        } catch (convError) {
+                            console.error('MP4変換エラー:', convError);
+                            setProcessingStatus('変換に失敗しました');
+                        }
+                    }
+
+                    // 変換に失敗した場合は代替方法のメッセージを表示
+                    if (hasAttemptedConversion) {
+                        console.log('変換が失敗しました。WebM形式でダウンロードします。');
+                        console.log('ヒント: WebM → MP4変換には以下の外部ツールが使えます:');
+                        console.log('- CloudConvert (https://cloudconvert.com/webm-to-mp4)');
+                        console.log('- FFmpeg (https://ffmpeg.org/)');
+                        console.log('- VLC Media Player');
+                    }
+
+                    // 変換失敗またはFFmpegが利用できない場合はWebMのまま提供
+                    setProcessingStatus('');
                     const url = URL.createObjectURL(blob);
                     setDownloadUrl(url);
+                    setIsMP4Format(false);
                 } catch (error) {
                     console.error('Blob作成エラー:', error);
+                    setProcessingStatus('エラーが発生しました');
                 } finally {
                     setProcessing(false);
                 }
@@ -287,7 +422,7 @@ export default function ShaderCanvas({ slug }: { slug: string }) {
             setRecording(false);
             setProcessing(false);
         }
-    }, [downloadUrl, getSupportedMimeType, stopRecording]);
+    }, [downloadUrl, getSupportedMimeType, stopRecording, ffmpegLoaded]);
 
     // クリーンアップ
     useEffect(() => {
@@ -323,13 +458,18 @@ export default function ShaderCanvas({ slug }: { slug: string }) {
 
             <div className="absolute bottom-6 right-6 flex gap-3 z-10">
                 {processing ? (
-                    <button
-                        className="p-2.5 bg-white rounded-full shadow-lg flex items-center justify-center opacity-80 cursor-wait"
-                        disabled
-                        title="処理中..."
-                    >
-                        <Loader2 className="h-5 w-5 text-gray-600 animate-spin" />
-                    </button>
+                    <div className="flex items-center gap-2">
+                        <div className="text-white text-xs bg-black/70 px-2 py-1 rounded">
+                            {processingStatus || '処理中...'}
+                        </div>
+                        <button
+                            className="p-2.5 bg-white rounded-full shadow-lg flex items-center justify-center opacity-80 cursor-wait"
+                            disabled
+                            title="処理中..."
+                        >
+                            <Loader2 className="h-5 w-5 text-gray-600 animate-spin" />
+                        </button>
+                    </div>
                 ) : recording ? (
                     <button
                         className="p-2.5 bg-white rounded-full shadow-lg flex items-center justify-center hover:bg-gray-100 transition-colors"
@@ -349,14 +489,25 @@ export default function ShaderCanvas({ slug }: { slug: string }) {
                 )}
 
                 {downloadUrl && !processing && (
-                    <a
-                        href={downloadUrl}
-                        download={`${slug}.webm`}
-                        className="p-2.5 bg-white rounded-full shadow-lg flex items-center justify-center hover:bg-gray-100 transition-colors"
-                        title="ダウンロード"
-                    >
-                        <Download className="h-5 w-5 text-blue-600" strokeWidth={2.5} />
-                    </a>
+                    <div className="flex items-center gap-2">
+                        <a
+                            href={downloadUrl}
+                            download={`${slug}${isMP4Format ? '.mp4' : '.webm'}`}
+                            className="p-2.5 bg-white rounded-full shadow-lg flex items-center justify-center hover:bg-gray-100 transition-colors"
+                            title={`ダウンロード (${isMP4Format ? 'MP4' : 'WebM'})`}
+                        >
+                            <Download className="h-5 w-5 text-blue-600" strokeWidth={2.5} />
+                        </a>
+                        {!isMP4Format && (
+                            <div className="text-white text-xs bg-black/70 px-2 py-1 rounded max-w-xs">
+                                WebM形式で保存されます。MP4に変換するには
+                                <a href="https://cloudconvert.com/webm-to-mp4" target="_blank" rel="noopener noreferrer" className="text-blue-400 hover:underline ml-1">
+                                    外部ツール
+                                </a>
+                                をご利用ください。
+                            </div>
+                        )}
+                    </div>
                 )}
             </div>
         </div>
