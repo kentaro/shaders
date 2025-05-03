@@ -3,16 +3,14 @@ import type { NextConfig } from "next";
 const basePath = process.env.NODE_ENV === 'production' ? '/shaders' : '';
 
 const nextConfig: NextConfig = {
-  /* config options here */
-  // 本番環境では /shaders をベースパスとして使用
+  output: 'export', // 静的生成を有効化
   basePath,
-  // 静的アセットのプレフィックスも同じく設定
   assetPrefix: basePath,
-  // ランタイム設定を公開
   publicRuntimeConfig: {
     basePath,
   },
   images: {
+    unoptimized: true, // GitHub Pages用に画像最適化を無効化
     remotePatterns: [
       {
         protocol: 'https',
@@ -25,8 +23,9 @@ const nextConfig: NextConfig = {
         pathname: '/presskit/**',
       },
     ],
-    unoptimized: process.env.NODE_ENV === 'production',
   },
+  // GitHub ActionsのworkflowでbasePathが正しく機能するために
+  trailingSlash: true,
   typescript: {
     // 一時的に型チェックを緩和してビルドを成功させる
     ignoreBuildErrors: true,
