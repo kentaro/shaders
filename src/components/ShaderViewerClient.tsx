@@ -13,9 +13,14 @@ interface Props {
 
 export default function ShaderViewerClient({ code, slug }: Props) {
     const setCode = useShaderStore((s) => s.setCode);
+
     useEffect(() => {
         setCode(slug, code);
+
+        // ページ遷移時にスクロール位置を最上部にリセット
+        window.scrollTo(0, 0);
     }, [slug, code, setCode]);
+
     return (
         <div className="flex flex-col-reverse md:flex-row h-dvh">
             <div className="md:w-1/2 h-64 md:h-full border-r">
