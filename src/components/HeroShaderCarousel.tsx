@@ -491,7 +491,7 @@ export default function HeroShaderCarousel({ slugs }: Props) {
 
         const id = setInterval(() => {
             setIdx((i) => (i + 1) % randomizedSlugs.length);
-        }, 10000);
+        }, 5000);
 
         return () => clearInterval(id);
     }, [randomizedSlugs.length]);

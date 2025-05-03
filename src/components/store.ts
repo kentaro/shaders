@@ -19,7 +19,7 @@ const loadPreloadedCodes = (): Record<string, string> => {
   try {
     const data = JSON.parse(scriptElement.textContent);
     return data;
-  } catch (_) {
+  } catch {
     return {};
   }
 };
