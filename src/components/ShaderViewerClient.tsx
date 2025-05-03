@@ -22,11 +22,11 @@ export default function ShaderViewerClient({ code, slug }: Props) {
     }, [slug, code, setCode]);
 
     return (
-        <div className="flex flex-col-reverse md:flex-row h-dvh">
-            <div className="md:w-1/2 h-64 md:h-full border-r">
+        <div className="flex flex-col-reverse md:flex-row h-[100dvh] w-full">
+            <div className="h-[40vh] md:h-full md:w-1/2 border-t md:border-t-0 md:border-r">
                 <Editor initialCode={code} slug={slug} />
             </div>
-            <div className="relative md:w-1/2 grow">
+            <div className="h-[60vh] md:h-full md:w-1/2 relative">
                 <Canvas slug={slug} />
             </div>
         </div>

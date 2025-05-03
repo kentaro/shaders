@@ -21,9 +21,9 @@ export default async function Home() {
         }}
       />
       <HeroShell slugs={shaders.map((s) => s.slug)} />
-      <main className="flex flex-wrap justify-center gap-6 p-8">
+      <main className="flex flex-wrap justify-center gap-8 p-6 md:gap-10 md:p-8 max-w-screen-xl mx-auto">
         {shaders.map((s) => (
-          <Link key={s.slug} href={`/shader/${s.slug}`} className="w-64 space-y-2">
+          <Link key={s.slug} href={`/shader/${s.slug}`} className="w-full sm:w-72 md:w-80 space-y-3 mb-4">
             <ShaderCard slug={s.slug} title={s.title} />
             <h2 className="text-neonCyan font-mono text-sm tracking-wide">
               {s.title}
