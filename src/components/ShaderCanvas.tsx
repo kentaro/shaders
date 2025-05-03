@@ -90,6 +90,7 @@ export default function ShaderCanvas({ slug }: { slug: string }) {
     const timeRef = useRef<number>(0);
     const videoCanvasRef = useRef<HTMLCanvasElement | null>(null);
     const rendererRef = useRef<{ render: (time: number) => HTMLCanvasElement } | null>(null);
+    const [recordingTime, setRecordingTime] = useState(0);
 
     const [recording, setRecording] = useState(false);
     const [processing, setProcessing] = useState(false);

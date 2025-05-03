@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { getShader } from "@/lib/shaders";
 import Viewer from "@/components/ShaderViewerClient";
+import type { Metadata } from "next";
 
 export async function generateStaticParams() {
     const { listShaders } = await import("@/lib/shaders");
@@ -8,9 +9,12 @@ export async function generateStaticParams() {
     return shaders.map((s) => ({ slug: s.slug }));
 }
 
-export async function generateMetadata({ params }: { params: { slug: string } }) {
-    const resolvedParams = await params;
-    const shader = await getShader(resolvedParams.slug);
+export async function generateMetadata({
+    params
+}: {
+    params: { slug: string }
+}): Promise<Metadata> {
+    const shader = await getShader(params.slug);
     if (!shader) return {};
     const base = process.env.NEXT_PUBLIC_SITE_URL ?? "";
     const description = `${shader.title} - インタラクティブなGLSLシェーダー`;
@@ -38,9 +42,12 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     };
 }
 
-export default async function ShaderPage({ params }: { params: { slug: string } }) {
-    const resolvedParams = await params;
-    const shader = await getShader(resolvedParams.slug);
+export default async function ShaderPage({
+    params
+}: {
+    params: { slug: string }
+}) {
+    const shader = await getShader(params.slug);
     if (!shader) notFound();
     return <Viewer code={shader.code} slug={shader.slug} />;
 } 
