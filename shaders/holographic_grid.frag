@@ -153,8 +153,8 @@ vec3 glitchEffect(vec3 color,vec2 uv,float time,float audio){
             float offset=(hash_value-.95)*20.*audio;
             
             // Shift red and blue channels horizontally in opposite directions
-            float rNoise=hash(vec2(uv.x+offset*.05,uv.y)*100.+time);
-            float bNoise=hash(vec2(uv.x-offset*.05,uv.y)*100.+time);
+            float rNoise=hash(vec2(uv.x+offset*.05,uv.y)*100.+vec2(time,0.));
+            float bNoise=hash(vec2(uv.x-offset*.05,uv.y)*100.+vec2(time,0.));
             
             // Mix the original color with the glitched version
             vec3 glitched=color;

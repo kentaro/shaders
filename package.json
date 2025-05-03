@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "next dev",
     "prebuild": "npm run gen-thumbs",
     "build": "next build --no-lint",
     "start": "next start",
@@ -11,7 +11,9 @@
     "lint:biome": "biome check .",
     "format": "biome format . --write",
     "prepare": "npx biome",
-    "gen-thumbs": "tsx scripts/gen-thumbs.ts"
+    "gen-thumbs": "tsx scripts/gen-thumbs.ts",
+    "export": "next build --no-lint",
+    "deploy": "touch out/.nojekyll && gh-pages -d out"
   },
   "dependencies": {
     "@monaco-editor/react": "^4.7.0",
@@ -37,6 +39,7 @@
     "canvas": "^3.1.0",
     "eslint": "^9",
     "eslint-config-next": "15.3.1",
+    "gh-pages": "^6.3.0",
     "pngjs": "^7.0.0",
     "puppeteer": "^24.8.0",
     "tailwindcss": "^4",

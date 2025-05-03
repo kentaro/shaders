@@ -2,19 +2,16 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
-import { useRouter } from 'next/router';
-import getConfig from 'next/config';
+import useBasePath from '@/lib/useBasePath';
 
 interface Props {
     slug: string;
     title: string;
 }
 
-// 設定を取得
-const { publicRuntimeConfig } = getConfig() || {};
-const basePath = publicRuntimeConfig?.basePath || '';
-
 export default function ShaderCard({ slug, title }: Props) {
+    const basePath = useBasePath();
+
     return (
         <motion.div
             whileHover={{ rotateX: -5, rotateY: 8, scale: 1.06 }}

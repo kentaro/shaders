@@ -3,11 +3,13 @@ import { listShaders } from "@/lib/shaders";
 import ShaderCard from "@/components/ShaderCard";
 import HeroShell from "@/components/HeroShell";
 import { generatePreloadedStore } from "@/lib/preload-shaders";
+import { getBasePath } from "@/lib/basePath";
 
 export default async function Home() {
   const shaders = await listShaders();
   // シェーダーコードをJSで利用できるようにシリアライズ
   const preloadedStore = generatePreloadedStore(shaders);
+  const basePath = getBasePath();
 
   return (
     <>

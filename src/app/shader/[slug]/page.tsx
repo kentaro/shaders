@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { getShader } from "@/lib/shaders";
 import Viewer from "@/components/ShaderViewerClient";
 import type { Metadata } from "next";
+import { getBasePath, getFullUrl } from "@/lib/basePath";
 
 export async function generateStaticParams() {
     const { listShaders } = await import("@/lib/shaders");
@@ -19,17 +20,20 @@ export async function generateMetadata({
     const { slug } = await params;
     const shader = await getShader(slug);
     if (!shader) return {};
-    const base = process.env.NEXT_PUBLIC_SITE_URL ?? "";
+
     const description = `${shader.title} - インタラクティブなGLSLシェーダー`;
+    const thumbnailUrl = getFullUrl(`/thumbnails/${shader.slug}.png`);
+    const pageUrl = getFullUrl(`/shader/${shader.slug}`);
+
     return {
         title: `${shader.title} | Shader VJ`,
         description: description,
         openGraph: {
             title: shader.title,
             description: description,
-            url: `${base}/shader/${shader.slug}`,
+            url: pageUrl,
             images: [{
-                url: `${base}/thumbnails/${shader.slug}.png`,
+                url: thumbnailUrl,
                 width: 1200,
                 height: 630,
                 alt: shader.title,
@@ -40,7 +44,7 @@ export async function generateMetadata({
             card: 'summary_large_image',
             title: shader.title,
             description: description,
-            images: [`${base}/thumbnails/${shader.slug}.png`],
+            images: [thumbnailUrl],
         }
     };
 }
