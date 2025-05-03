@@ -1,9 +1,17 @@
 import type { NextConfig } from "next";
 
+const basePath = process.env.NODE_ENV === 'production' ? '/shaders' : '';
+
 const nextConfig: NextConfig = {
   /* config options here */
   // 本番環境では /shaders をベースパスとして使用
-  basePath: process.env.NODE_ENV === 'production' ? '/shaders' : '',
+  basePath,
+  // 静的アセットのプレフィックスも同じく設定
+  assetPrefix: basePath,
+  // ランタイム設定を公開
+  publicRuntimeConfig: {
+    basePath,
+  },
   images: {
     remotePatterns: [
       {

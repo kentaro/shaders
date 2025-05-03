@@ -2,11 +2,17 @@
 
 import { motion } from "framer-motion";
 import Image from "next/image";
+import { useRouter } from 'next/router';
+import getConfig from 'next/config';
 
 interface Props {
     slug: string;
     title: string;
 }
+
+// 設定を取得
+const { publicRuntimeConfig } = getConfig() || {};
+const basePath = publicRuntimeConfig?.basePath || '';
 
 export default function ShaderCard({ slug, title }: Props) {
     return (
@@ -16,7 +22,7 @@ export default function ShaderCard({ slug, title }: Props) {
             className="relative rounded-xl shadow-neon group"
         >
             <Image
-                src={`/thumbnails/${slug}.png`}
+                src={`${basePath}/thumbnails/${slug}.png`}
                 alt={title}
                 width={320}
                 height={180}
