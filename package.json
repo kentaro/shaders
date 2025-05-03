@@ -4,24 +4,43 @@
   "private": true,
   "scripts": {
     "dev": "next dev --turbopack",
+    "prebuild": "npm run gen-thumbs",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "lint:biome": "biome check .",
+    "format": "biome format . --write",
+    "prepare": "npx biome",
+    "gen-thumbs": "tsx scripts/gen-thumbs.ts"
   },
   "dependencies": {
+    "@monaco-editor/react": "^4.7.0",
+    "@react-three/drei": "^9.106.8",
+    "@react-three/fiber": "^9.1.2",
+    "framer-motion": "^11.0.0",
+    "lucide-react": "^0.507.0",
+    "next": "15.3.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "next": "15.3.1"
+    "three": "^0.162.0",
+    "yaml": "^2.4.2",
+    "zustand": "^4.5.2"
   },
   "devDependencies": {
-    "typescript": "^5",
+    "@eslint/eslintrc": "^3",
+    "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
-    "@tailwindcss/postcss": "^4",
-    "tailwindcss": "^4",
+    "@types/three": "^0.164.1",
+    "biome": "^0.3.3",
+    "canvas": "^3.1.0",
     "eslint": "^9",
     "eslint-config-next": "15.3.1",
-    "@eslint/eslintrc": "^3"
+    "pngjs": "^7.0.0",
+    "puppeteer": "^24.8.0",
+    "tailwindcss": "^4",
+    "tsx": "^4.19.4",
+    "typescript": "^5.8.3"
   }
 }

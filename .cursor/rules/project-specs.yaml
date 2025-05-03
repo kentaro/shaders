@@ -1,0 +1,25 @@
+site:
+  deployment: github-pages
+  output: next-export
+  basePath: /shaders # adjust per repo name
+  license: CC-BY-SA-4.0
+ui:
+  hero: shader-carousel # 10s cross-fade
+  theme: neon-dark-tailwind # neonPink, neonCyan, neonPurple
+  card_effects: 3d-tilt+glitch
+components:
+  editor: CodeMirror6
+  renderer: three.js r170 + @react-three/fiber
+  store: zustand
+  recorder: MediaRecorder API
+assets:
+  shaders_meta: data/shaders.yaml
+  thumbnails: public/thumbnails/{slug}.png
+  og_images: public/og/{slug}.png
+  thumbnail_script: scripts/gen-thumbs.ts
+seo:
+  ogp_per_shader: static PNG via generateMetadata
+  sitemap: static after export
+extra:
+  pwa: false
+  analytics: optional gtag.js

@@ -1,0 +1,95 @@
+- slug: polygon_burst
+  title: "🔷 Polygon Burst"
+  code: shaders/polygon_burst.frag
+
+- slug: star_radiation
+  title: "🌟 Star Radiation"
+  code: shaders/star_radiation.frag
+
+- slug: circle_ripple
+  title: "⭕ Circle Ripple"
+  code: shaders/circle_ripple.frag
+
+- slug: fractal_burst
+  title: "🌀 Fractal Burst"
+  code: shaders/fractal_burst.frag
+
+- slug: neon_explosion
+  title: "💥 Neon Explosion"
+  code: shaders/neon_explosion.frag
+
+- slug: crystal_growth
+  title: "💎 Crystal Growth"
+  code: shaders/crystal_growth.frag
+
+- slug: particle_vortex
+  title: "🌪️ Particle Vortex"
+  code: shaders/particle_vortex.frag
+
+- slug: geometric_dance
+  title: "🔶 Geometric Dance"
+  code: shaders/geometric_dance.frag
+
+- slug: wave_interference
+  title: "〰️ Wave Interference"
+  code: shaders/wave_interference.frag
+
+- slug: kaleidoscope_burst
+  title: "🎆 Kaleidoscope Burst"
+  code: shaders/kaleidoscope_burst.frag
+
+- slug: rainbow
+  title: "🌈 Rainbow Flow"
+  code: shaders/rainbow.frag
+
+- slug: tunnel
+  title: "🌀 Tunnel Drive"
+  code: shaders/tunnel.frag
+
+- slug: pulse
+  title: "💓 Neon Pulse"
+  code: shaders/pulse.frag
+
+- slug: fractal_zoom
+  title: "🔍 Fractal Zoom"
+  code: shaders/fractal_zoom.frag
+
+- slug: electric_plasma
+  title: "⚡ Electric Plasma"
+  code: shaders/electric_plasma.frag
+
+- slug: audio_reactive_grid
+  title: "🎵 Audio Grid"
+  code: shaders/audio_reactive_grid.frag
+
+- slug: kaleidoscope
+  title: "✨ Kaleidoscope"
+  code: shaders/kaleidoscope.frag
+
+- slug: voronoi_warp
+  title: "🌊 Voronoi Warp"
+  code: shaders/voronoi_warp.frag
+
+- slug: fluid_simulation
+  title: "💧 Fluid Simulation"
+  code: shaders/fluid_simulation.frag
+
+- slug: galaxy_spiral
+  title: "🌌 Galaxy Spiral"
+  code: shaders/galaxy_spiral.frag
+
+- slug: fire_flames
+  title: "🔥 Fire Flames"
+  code: shaders/fire_flames.frag
+
+- slug: holographic_grid
+  title: "🔮 Holographic Grid"
+  code: shaders/holographic_grid.frag
+
+- slug: cyber_neon
+  title: "🏙️ Cyber Neon"
+  code: shaders/cyber_neon.frag
+
+- slug: electric_wire_grid
+  title: "⚡ Electric Wire Grid"
+  code: shaders/electric_wire_grid.frag 

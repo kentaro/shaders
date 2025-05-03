@@ -1,0 +1,15 @@
+# Project navigation helper for Cursor
+app_dir: src/app               # Next.js App Router pages
+entry_page: src/app/page.tsx   # Home page component
+layout: src/app/layout.tsx     # Root layout with font imports
+styles: src/app/globals.css    # Global Tailwind styles
+data_yaml: data/shaders.yaml   # Shader metadata source
+components_dir: src/components # React components (Canvas, Editor, etc.)
+config:
+  next: next.config.ts         # Next.js config (static export, assetPrefix)
+  tailwind: tailwind.config.mjs
+scripts:
+  thumbnails: scripts/gen-thumbs.ts # Build-time thumbnail generator
+public_assets:
+  thumbnails: public/thumbnails     # Generated 1st-frame PNGs
+  og: public/og                     # 1200x630 images for OGP
