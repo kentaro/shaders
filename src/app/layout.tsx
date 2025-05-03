@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import Link from "next/link";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -40,12 +41,10 @@ export default function RootLayout({
             display: none;
           }
           .site-logo {
-            display: inline-block;
+            position: relative;
             letter-spacing: 0.05em;
-          }
-          .logo-part {
             display: inline-block;
-            line-height: 1;
+            font-family: monospace;
           }
         `}</style>
       </head>
@@ -54,13 +53,14 @@ export default function RootLayout({
       >
         <nav className="fixed top-0 left-0 w-full z-50 bg-black/50 backdrop-blur-md border-b border-white/10">
           <div className="container mx-auto px-4 py-3 flex justify-between items-center">
-            <a href="/" className="font-mono text-xl tracking-wide font-bold site-title site-logo" style={{ textDecoration: 'none' }}>
-              <span className="logo-text-cyan logo-part">SHADER</span>
-              <span className="logo-text-pink logo-part">NEXUS</span>
-            </a>
+            <Link href="/" className="font-mono text-xl tracking-wide font-bold" style={{ textDecoration: 'none' }}>
+              <span className="logo-wrapper">
+                <span className="logo-text logo-text-cyan">SHADER</span><span className="logo-text logo-text-pink">NEXUS</span>
+              </span>
+            </Link>
             <div className="flex space-x-6">
-              <a href="/" className="text-white/80 hover:text-neonCyan transition-colors">Home</a>
-              <a href="/about" className="text-white/80 hover:text-neonCyan transition-colors">About</a>
+              <Link href="/" className="text-white/80 hover:text-neonCyan transition-colors">Home</Link>
+              <Link href="/about" className="text-white/80 hover:text-neonCyan transition-colors">About</Link>
             </div>
           </div>
         </nav>

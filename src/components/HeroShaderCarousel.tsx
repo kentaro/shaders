@@ -181,8 +181,8 @@ function Canvas2DShader({ slug }: { slug: string }) {
                     const maxIter = 100;
                     let iter = 0;
 
-                    let cx = zx;
-                    let cy = zy;
+                    const cx = zx;
+                    const cy = zy;
 
                     while (iter < maxIter && zx * zx + zy * zy < 4) {
                         const tmp = zx * zx - zy * zy + cx;
@@ -464,21 +464,39 @@ function Canvas2DShader({ slug }: { slug: string }) {
     return <canvas ref={canvasRef} className="w-full h-full bg-black" />;
 }
 
+// 配列をシャッフルするヘルパー関数
+function shuffleArray<T>(array: T[]): T[] {
+    const newArray = [...array];
+    for (let i = newArray.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+    }
+    return newArray;
+}
+
 export default function HeroShaderCarousel({ slugs }: Props) {
     const [idx, setIdx] = useState(0);
+    const [randomizedSlugs, setRandomizedSlugs] = useState<string[]>([]);
+
+    // マウント時にシェーダーをランダムな順番にシャッフル
+    useEffect(() => {
+        if (slugs.length === 0) return;
+        // シェーダーの順番をランダム化
+        setRandomizedSlugs(shuffleArray(slugs));
+    }, [slugs]);
 
     // シェーダー切り替えのインターバル
     useEffect(() => {
-        if (slugs.length === 0) return;
+        if (randomizedSlugs.length === 0) return;
 
         const id = setInterval(() => {
-            setIdx((i) => (i + 1) % slugs.length);
+            setIdx((i) => (i + 1) % randomizedSlugs.length);
         }, 10000);
 
         return () => clearInterval(id);
-    }, [slugs.length]);
+    }, [randomizedSlugs.length]);
 
-    if (slugs.length === 0) {
+    if (randomizedSlugs.length === 0) {
         return null;
     }
 
@@ -486,19 +504,19 @@ export default function HeroShaderCarousel({ slugs }: Props) {
         <div className="relative h-[70vh] w-full overflow-hidden border-b border-white/10">
             <AnimatePresence mode="wait">
                 <motion.div
-                    key={slugs[idx]}
+                    key={randomizedSlugs[idx]}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 1.2 }}
                     className="absolute inset-0"
                 >
-                    <Canvas2DShader slug={slugs[idx]} />
+                    <Canvas2DShader slug={randomizedSlugs[idx]} />
                 </motion.div>
             </AnimatePresence>
             <div className="absolute bottom-4 right-4 z-10">
                 <div className="flex gap-1">
-                    {slugs.map((_, i) => (
+                    {randomizedSlugs.map((_, i) => (
                         <button
                             key={i}
                             onClick={() => setIdx(i)}
@@ -509,9 +527,10 @@ export default function HeroShaderCarousel({ slugs }: Props) {
                 </div>
             </div>
             <div className="relative z-10 flex h-full w-full items-center justify-center pointer-events-none">
-                <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight text-white mix-blend-difference select-none">
-                    <span className="inline-block align-baseline" style={{ color: '#00ffff', textShadow: '0 0 5px #00ffff, 0 0 10px #00ffff', lineHeight: '1' }}>SHADER</span>
-                    <span className="inline-block align-baseline" style={{ color: '#ff00ff', textShadow: '0 0 5px #ff00ff, 0 0 10px #ff00ff', lineHeight: '1' }}>NEXUS</span>
+                <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight select-none">
+                    <div className="logo-wrapper" style={{ fontSize: 'inherit' }}>
+                        <span className="logo-text" style={{ color: '#00ffff', textShadow: '0 0 5px #00ffff, 0 0 10px #00ffff' }}>SHADER</span><span className="logo-text" style={{ color: '#ff00ff', textShadow: '0 0 5px #ff00ff, 0 0 10px #ff00ff' }}>NEXUS</span>
+                    </div>
                 </h1>
             </div>
         </div>

@@ -32,6 +32,23 @@ body {
     0 0 15px rgba(255, 0, 255, 0.3);
 }
 
+.logo-wrapper {
+  display: inline-block;
+  white-space: nowrap;
+  font-family: monospace;
+  letter-spacing: 0;
+  line-height: 1;
+}
+
+.logo-text {
+  display: inline-block;
+  vertical-align: baseline;
+  position: relative;
+  font-family: monospace;
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
 .glitch-text {
   position: relative;
   letter-spacing: 0.05em;

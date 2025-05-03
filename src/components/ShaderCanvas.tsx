@@ -90,7 +90,6 @@ export default function ShaderCanvas({ slug }: { slug: string }) {
     const timeRef = useRef<number>(0);
     const videoCanvasRef = useRef<HTMLCanvasElement | null>(null);
     const rendererRef = useRef<{ render: (time: number) => HTMLCanvasElement } | null>(null);
-    const [recordingTime, setRecordingTime] = useState(0);
 
     const [recording, setRecording] = useState(false);
     const [processing, setProcessing] = useState(false);
@@ -124,8 +123,6 @@ export default function ShaderCanvas({ slug }: { slug: string }) {
             timeRef.current = elapsedTime;
 
             if (recording && rendererRef.current && videoCanvasRef.current) {
-                setRecordingTime(elapsedTime);
-
                 // シェーダーをレンダリングして録画用キャンバスに描画
                 const shaderCanvas = rendererRef.current.render(elapsedTime);
                 const ctx = videoCanvasRef.current.getContext('2d');
@@ -162,6 +159,35 @@ export default function ShaderCanvas({ slug }: { slug: string }) {
 
         console.warn('サポートされているMIMEタイプが見つかりません。デフォルトを使用');
         return '';
+    }, []);
+
+    // 録画停止
+    const stopRecording = useCallback(() => {
+        console.log("録画停止処理開始");
+        try {
+            if (recordingTimeoutRef.current) {
+                clearTimeout(recordingTimeoutRef.current);
+                recordingTimeoutRef.current = null;
+            }
+
+            if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
+                // 最後のデータを要求
+                mediaRecorderRef.current.requestData();
+
+                // 少し待ってから停止
+                setTimeout(() => {
+                    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
+                        mediaRecorderRef.current.stop();
+                        console.log("MediaRecorder停止完了");
+                    }
+                }, 200);
+            }
+        } catch (error) {
+            console.error('録画停止エラー:', error);
+            setProcessing(false);
+        } finally {
+            setRecording(false);
+        }
     }, []);
 
     // 録画開始
@@ -261,36 +287,7 @@ export default function ShaderCanvas({ slug }: { slug: string }) {
             setRecording(false);
             setProcessing(false);
         }
-    }, [downloadUrl, getSupportedMimeType]);
-
-    // 録画停止
-    const stopRecording = useCallback(() => {
-        console.log("録画停止処理開始");
-        try {
-            if (recordingTimeoutRef.current) {
-                clearTimeout(recordingTimeoutRef.current);
-                recordingTimeoutRef.current = null;
-            }
-
-            if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
-                // 最後のデータを要求
-                mediaRecorderRef.current.requestData();
-
-                // 少し待ってから停止
-                setTimeout(() => {
-                    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
-                        mediaRecorderRef.current.stop();
-                        console.log("MediaRecorder停止完了");
-                    }
-                }, 200);
-            }
-        } catch (error) {
-            console.error('録画停止エラー:', error);
-            setProcessing(false);
-        } finally {
-            setRecording(false);
-        }
-    }, []);
+    }, [downloadUrl, getSupportedMimeType, stopRecording]);
 
     // クリーンアップ
     useEffect(() => {

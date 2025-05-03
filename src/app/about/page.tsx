@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -10,7 +11,9 @@ export default function AboutPage() {
     return (
         <main className="container mx-auto px-4 py-10 max-w-4xl">
             <h1 className="text-4xl md:text-5xl font-bold mb-8">
-                About <span className="text-neonCyan">SHADER</span><span className="text-neonPink">NEXUS</span>
+                About <span className="logo-wrapper">
+                    <span className="logo-text text-neonCyan">SHADER</span><span className="logo-text text-neonPink">NEXUS</span>
+                </span>
             </h1>
 
             <div className="space-y-8 text-lg">
@@ -72,7 +75,13 @@ export default function AboutPage() {
                             <li>継承 — 元の作品と同じライセンスの下に、あなたの貢献を頒布する必要があります</li>
                         </ul>
                         <div className="mt-4 flex items-center gap-3">
-                            <img src="https://mirrors.creativecommons.org/presskit/buttons/88x31/svg/by-sa.svg" alt="CC BY-SA License" className="h-8" />
+                            <Image
+                                src="https://mirrors.creativecommons.org/presskit/buttons/88x31/svg/by-sa.svg"
+                                alt="CC BY-SA License"
+                                className="h-8 w-auto"
+                                width={88}
+                                height={31}
+                            />
                             <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.ja" className="text-neonCyan hover:underline" target="_blank" rel="noopener noreferrer">
                                 ライセンスの詳細を見る
                             </a>
@@ -85,13 +94,19 @@ export default function AboutPage() {
                     <div className="flex flex-col md:flex-row gap-6 items-start mb-6">
                         <div className="max-w-[120px]">
                             <div className="w-[120px] h-[120px] rounded-full border-2 border-neonCyan overflow-hidden bg-black/30">
-                                <img src="https://pbs.twimg.com/profile_images/1893532407988367361/5EfifO80_400x400.jpg" alt="栗林健太郎" className="w-full h-full object-cover" />
+                                <Image
+                                    src="https://pbs.twimg.com/profile_images/1893532407988367361/5EfifO80_400x400.jpg"
+                                    alt="栗林健太郎"
+                                    className="w-full h-full object-cover"
+                                    width={120}
+                                    height={120}
+                                />
                             </div>
                         </div>
                         <div className="flex-1">
                             <h3 className="text-xl font-bold mb-2">栗林健太郎（Kentaro Kuribayashi）</h3>
                             <p className="mb-3">
-                                GMOペパボ株式会社取締役CTO / 一般社団法人日本CTO協会理事 / 博士（情報科学） 
+                                GMOペパボ株式会社取締役CTO / 一般社団法人日本CTO協会理事 / 博士（情報科学）
                             </p>
                             <p className="mb-3">
                                 VJ・シェーダーアート・WebGL・音楽制作など、テクノロジーとクリエイティブの融合に興味を持つ。
