@@ -456,7 +456,7 @@ export default function ShaderCanvas({ slug }: { slug: string }) {
                 <Plane frag={code || "void main(){gl_FragColor=vec4(0.0);}"} />
             </Canvas>
 
-            <div className="absolute bottom-6 right-6 flex gap-3 z-10">
+            <div className="absolute top-2 right-2 md:top-6 md:right-6 flex gap-3 z-20 bg-black/30 md:bg-transparent px-2 py-1 md:p-0 rounded-full md:rounded-none">
                 {processing ? (
                     <div className="flex items-center gap-2">
                         <div className="text-white text-xs bg-black/70 px-2 py-1 rounded">

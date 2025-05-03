@@ -17,7 +17,7 @@ export default function ShaderViewerClient({ code, slug }: Props) {
         setCode(slug, code);
     }, [slug, code, setCode]);
     return (
-        <div className="flex flex-col md:flex-row h-dvh">
+        <div className="flex flex-col-reverse md:flex-row h-dvh">
             <div className="md:w-1/2 h-64 md:h-full border-r">
                 <Editor initialCode={code} slug={slug} />
             </div>
