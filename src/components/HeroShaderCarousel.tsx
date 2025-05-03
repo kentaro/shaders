@@ -340,7 +340,14 @@ function Canvas2DShader({ slug }: { slug: string }) {
 
             // ボロノイセルの数
             const numCells = 12;
-            const points = [];
+
+            // 明示的な型を定義
+            interface VoronoiPoint {
+                x: number;
+                y: number;
+                c: number[];
+            }
+            const points: VoronoiPoint[] = [];
 
             // 時間によって動くセルの中心点を生成
             for (let i = 0; i < numCells; i++) {
@@ -361,7 +368,7 @@ function Canvas2DShader({ slug }: { slug: string }) {
 
                     // 最も近いセルを見つける
                     let minDist = 2.0;
-                    let cellColor = [0, 0, 0];
+                    let cellColor: number[] = [0, 0, 0];
 
                     for (let i = 0; i < numCells; i++) {
                         const dx = uvX - points[i].x;

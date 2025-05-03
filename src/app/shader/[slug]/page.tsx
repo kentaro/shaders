@@ -9,12 +9,15 @@ export async function generateStaticParams() {
     return shaders.map((s) => ({ slug: s.slug }));
 }
 
+type Params = { slug: string };
+
 export async function generateMetadata({
     params
 }: {
-    params: { slug: string }
+    params: Promise<Params>
 }): Promise<Metadata> {
-    const shader = await getShader(params.slug);
+    const { slug } = await params;
+    const shader = await getShader(slug);
     if (!shader) return {};
     const base = process.env.NEXT_PUBLIC_SITE_URL ?? "";
     const description = `${shader.title} - インタラクティブなGLSLシェーダー`;
@@ -45,9 +48,10 @@ export async function generateMetadata({
 export default async function ShaderPage({
     params
 }: {
-    params: { slug: string }
+    params: Promise<Params>
 }) {
-    const shader = await getShader(params.slug);
+    const { slug } = await params;
+    const shader = await getShader(slug);
     if (!shader) notFound();
     return <Viewer code={shader.code} slug={shader.slug} />;
 } 

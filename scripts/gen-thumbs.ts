@@ -1094,7 +1094,14 @@ function renderVoronoiStyle(ctx: any, colors: string[], width: number, height: n
   
   const hash = simpleHash(slug);
   const pointCount = 20 + (hash % 20);
-  const points = [];
+  
+  // ポイントに明示的な型を定義
+  interface Point { 
+    x: number; 
+    y: number; 
+    color: string; 
+  }
+  const points: Point[] = [];
   
   // ランダムな点を生成
   for (let i = 0; i < pointCount; i++) {
@@ -1109,7 +1116,7 @@ function renderVoronoiStyle(ctx: any, colors: string[], width: number, height: n
     for (let y = 0; y < height; y += 4) {
       // 最も近い点を見つける
       let minDist = Infinity;
-      let closestPoint = null;
+      let closestPoint: Point | null = null;
       
       for (const point of points) {
         const dist = Math.sqrt(Math.pow(x - point.x, 2) + Math.pow(y - point.y, 2));
