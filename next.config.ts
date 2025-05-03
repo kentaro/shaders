@@ -2,6 +2,8 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   /* config options here */
+  // 本番環境では /shaders をベースパスとして使用
+  basePath: process.env.NODE_ENV === 'production' ? '/shaders' : '',
   images: {
     remotePatterns: [
       {
@@ -15,6 +17,7 @@ const nextConfig: NextConfig = {
         pathname: '/presskit/**',
       },
     ],
+    unoptimized: process.env.NODE_ENV === 'production',
   },
   typescript: {
     // 一時的に型チェックを緩和してビルドを成功させる
