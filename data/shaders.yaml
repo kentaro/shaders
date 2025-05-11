@@ -92,4 +92,181 @@
 
 - slug: electric_wire_grid
   title: "⚡ Electric Wire Grid"
-  code: shaders/electric_wire_grid.frag 
+  code: shaders/electric_wire_grid.frag
+
+- slug: laser_grid
+  title: "📡 Laser Grid"
+  code: shaders/laser_grid.frag
+
+- slug: disco_ball
+  title: "🪩 Disco Ball"
+  code: shaders/disco_ball.frag
+
+- slug: energy_field
+  title: "⚡ Energy Field"
+  code: shaders/energy_field.frag
+
+- slug: neon_cityscape
+  title: "🌃 Neon Cityscape"
+  code: shaders/neon_cityscape.frag
+
+- slug: fractal_flame
+  title: "🔥 Fractal Flame"
+  code: shaders/fractal_flame.frag
+
+- slug: hyperspace_tunnel
+  title: "🚀 Hyperspace Tunnel"
+  code: shaders/hyperspace_tunnel.frag
+
+- slug: glitch_cascade
+  title: "📺 Glitch Cascade"
+  code: shaders/glitch_cascade.frag
+
+- slug: spectrum_rings
+  title: "🌈 Spectrum Rings"
+  code: shaders/spectrum_rings.frag
+
+- slug: warp_speed
+  title: "💫 Warp Speed"
+  code: shaders/warp_speed.frag
+
+- slug: digital_flow
+  title: "🔌 Digital Flow"
+  code: shaders/digital_flow.frag
+
+- slug: neon_particles
+  title: "✨ Neon Particles"
+  code: shaders/neon_particles.frag
+
+- slug: electric_storm
+  title: "🌩️ Electric Storm"
+  code: shaders/electric_storm.frag
+
+- slug: geometric_wave
+  title: "📐 Geometric Wave"
+  code: shaders/geometric_wave.frag
+
+- slug: pixelated_fire
+  title: "🔥 Pixelated Fire"
+  code: shaders/pixelated_fire.frag
+
+- slug: liquid_metal
+  title: "🔷 Liquid Metal"
+  code: shaders/liquid_metal.frag
+
+- slug: aurora_lights
+  title: "🌌 Aurora Lights"
+  code: shaders/aurora_lights.frag
+
+- slug: audio_wave_spectrum
+  title: "🎵 Audio Wave Spectrum"
+  code: shaders/audio_wave_spectrum.frag
+
+- slug: matrix_rain
+  title: "🔢 Matrix Rain"
+  code: shaders/matrix_rain.frag
+
+- slug: color_explosion
+  title: "🎆 Color Explosion"
+  code: shaders/color_explosion.frag
+
+# --- ここから自動追加 ---
+- slug: 3d_cube
+  title: "🟫 3D Cube"
+  code: shaders/3d_cube.frag
+- slug: audio_spectrum
+  title: "🎚️ Audio Spectrum"
+  code: shaders/audio_spectrum.frag
+- slug: burst_spiral5
+  title: "🌀 Burst Spiral"
+  code: shaders/burst_spiral5.frag
+- slug: chroma_glitch
+  title: "📺 Chroma Glitch"
+  code: shaders/chroma_glitch.frag
+- slug: cube_3d
+  title: "🟫 Cube 3D"
+  code: shaders/cube_3d.frag
+- slug: geo_pattern
+  title: "🔷 Geo Pattern"
+  code: shaders/geo_pattern.frag
+- slug: glitch_matrix
+  title: "📉 Glitch Matrix"
+  code: shaders/glitch_matrix.frag
+- slug: glow_blur
+  title: "✨ Glow Blur"
+  code: shaders/glow_blur.frag
+- slug: kaleido_star
+  title: "✴️ Kaleido Star"
+  code: shaders/kaleido_star.frag
+- slug: mirror_reflect
+  title: "🪞 Mirror Reflect"
+  code: shaders/mirror_reflect.frag
+- slug: mirror_reflection
+  title: "🪞 Mirror Reflection"
+  code: shaders/mirror_reflection.frag
+- slug: neon_gridstorm
+  title: "🌩️ Neon Gridstorm"
+  code: shaders/neon_gridstorm.frag
+- slug: noise_cloud
+  title: "☁️ Noise Cloud"
+  code: shaders/noise_cloud.frag
+- slug: perspective_tunnel
+  title: "🌀 Perspective Tunnel"
+  code: shaders/perspective_tunnel.frag
+- slug: pixel_mosaic
+  title: "🟪 Pixel Mosaic"
+  code: shaders/pixel_mosaic.frag
+- slug: plasma_pulse
+  title: "⚛️ Plasma Pulse"
+  code: shaders/plasma_pulse.frag
+- slug: polygon_3d
+  title: "🔷 Polygon 3D"
+  code: shaders/polygon_3d.frag
+- slug: psychedelic_swirl
+  title: "🌀 Psychedelic Swirl"
+  code: shaders/psychedelic_swirl.frag
+- slug: pulse_ring
+  title: "⭕ Pulse Ring"
+  code: shaders/pulse_ring.frag
+- slug: random_pattern
+  title: "🔳 Random Pattern"
+  code: shaders/random_pattern.frag
+- slug: random_shapes
+  title: "🔳 Random Shapes"
+  code: shaders/random_shapes.frag
+- slug: random_switch
+  title: "🔀 Random Switch"
+  code: shaders/random_switch.frag
+- slug: rgb_scanline
+  title: "📺 RGB Scanline"
+  code: shaders/rgb_scanline.frag
+- slug: ring_3d
+  title: "🟠 3D Ring"
+  code: shaders/ring_3d.frag
+- slug: scanline_rgbshift
+  title: "📺 Scanline RGB Shift"
+  code: shaders/scanline_rgbshift.frag
+- slug: sine_grid
+  title: "〰️ Sine Grid"
+  code: shaders/sine_grid.frag
+- slug: sinewave_grid
+  title: "〰️ Sinewave Grid"
+  code: shaders/sinewave_grid.frag
+- slug: sphere_3d
+  title: "🌐 3D Sphere"
+  code: shaders/sphere_3d.frag
+- slug: spiral_3d
+  title: "🌀 3D Spiral"
+  code: shaders/spiral_3d.frag
+- slug: star_3d
+  title: "⭐ 3D Star"
+  code: shaders/star_3d.frag
+- slug: stripe_random
+  title: "🟦 Stripe Random"
+  code: shaders/stripe_random.frag
+- slug: strobe_flash
+  title: "⚡ Strobe Flash"
+  code: shaders/strobe_flash.frag
+- slug: tv_noise
+  title: "📺 TV Noise"
+  code: shaders/tv_noise.frag 
